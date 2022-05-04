@@ -1,5 +1,5 @@
 # time-logs-app
-simpleapp using react and sql database
+simpleapp using react and sql database (dependency : https://github.com/defecode/time-logs-api)
 
 # installation
 clone the code from terminal/cmd by 

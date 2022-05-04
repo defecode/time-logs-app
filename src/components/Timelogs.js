@@ -1,4 +1,5 @@
 import { Component } from "react";
+let { postData } = require("../util/http");
 
 function List(props) {
   return (
@@ -29,7 +30,6 @@ function List(props) {
 }
 
 function NotificationResult(props) {
-  
   if (props.isSuccess === null) {
     return "";
   } else {
@@ -53,6 +53,16 @@ class Timelogs extends Component {
     };
   }
 
+  componentDidMount() {
+    fetch("http://localhost:3001/timelogs")
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({
+          listTimeLogs: data,
+        });
+      });
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
     if (
@@ -65,19 +75,23 @@ class Timelogs extends Component {
       });
       return;
     }
-    this.setState({
-      listTimeLogs: [
-        ...this.state.listTimeLogs,
-        {
-          start: this.state.start,
-          end: this.state.end,
-          description: this.state.description,
-        },
-      ],
-      isSuccess: true,
-      start: "",
-      end: "",
-      description: "",
+
+    postData("http://localhost:3001/timelogs", {
+      start: this.state.start,
+      end: this.state.end,
+      description: this.state.description,
+    }).then((resultdatapost) => {
+      fetch("http://localhost:3001/timelogs")
+        .then((resultdataget) => resultdataget.json())
+        .then((data) => {
+          this.setState({
+            listTimeLogs: data,
+            isSuccess: true,
+            start: "",
+            end: "",
+            description: "",
+          });
+        });
     });
   };
 
